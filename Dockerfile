@@ -10,8 +10,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
-
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-grpc
 EXPOSE 10000
 
 CMD php artisan serve --host=0.0.0.0 --port=10000
