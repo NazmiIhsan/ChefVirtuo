@@ -1,0 +1,43 @@
+{
+    "name": "chefvirtuo/dashboard",
+    "type": "project",
+    "description": "ChefVirtuo lecturer dashboard for VR culinary quiz analytics.",
+    "require": {
+        "php": "^8.2",
+        "google/cloud-firestore": "^1.48",
+        "kreait/laravel-firebase": "*",
+        "laravel/framework": "^12.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.21",
+        "phpunit/phpunit": "^11.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

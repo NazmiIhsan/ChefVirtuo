@@ -1,0 +1,11 @@
+/vendor
+/node_modules
+/public/build
+/.env
+/.phpunit.cache
+/storage/app/firebase/*.json
+/storage/framework/cache/data
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+!.gitignore
