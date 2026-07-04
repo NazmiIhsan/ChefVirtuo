@@ -128,6 +128,19 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div id="resultsPagination" class="mt-5 hidden flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" aria-label="Quiz results pagination">
+                    <p id="paginationSummary" class="text-sm font-semibold text-black/55"></p>
+                    <div class="flex items-center gap-2">
+                        <button id="previousPage" type="button" class="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-black text-ink transition hover:border-ink hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-black/10 disabled:hover:bg-white disabled:hover:text-ink">
+                            Previous
+                        </button>
+                        <div id="paginationPages" class="flex items-center gap-2"></div>
+                        <button id="nextPage" type="button" class="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-black text-ink transition hover:border-ink hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-black/10 disabled:hover:bg-white disabled:hover:text-ink">
+                            Next
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <aside class="space-y-5">
@@ -357,12 +370,20 @@
         const tableBody = document.getElementById('resultsTableBody');
         const filteredResults = results.filter(passesFilters);
 
+        dashboardState.filteredResults = filteredResults;
+
         if (! filteredResults.length) {
             tableBody.innerHTML = '<tr><td colspan="7" class="px-5 py-10 text-center font-semibold text-black/50">No quiz results found.</td></tr>';
+            renderPagination(0);
             return;
         }
 
-        tableBody.innerHTML = filteredResults.map((result) => {
+        const totalPages = Math.ceil(filteredResults.length / dashboardState.perPage);
+        dashboardState.currentPage = Math.min(Math.max(dashboardState.currentPage, 1), totalPages);
+        const startIndex = (dashboardState.currentPage - 1) * dashboardState.perPage;
+        const pageResults = filteredResults.slice(startIndex, startIndex + dashboardState.perPage);
+
+        tableBody.innerHTML = pageResults.map((result) => {
             const badgeClass = result.status === 'PASS' ? 'bg-moss/20 text-green-800' : 'bg-red-100 text-red-700';
 
             return `
@@ -381,6 +402,38 @@
                 </tr>
             `;
         }).join('');
+
+        renderPagination(filteredResults.length);
+    }
+
+    function renderPagination(totalResults) {
+        const pagination = document.getElementById('resultsPagination');
+        const summary = document.getElementById('paginationSummary');
+        const pages = document.getElementById('paginationPages');
+        const previousButton = document.getElementById('previousPage');
+        const nextButton = document.getElementById('nextPage');
+        const totalPages = Math.ceil(totalResults / dashboardState.perPage);
+
+        if (! totalResults) {
+            pagination.classList.add('hidden');
+            return;
+        }
+
+        pagination.classList.remove('hidden');
+        pagination.classList.add('flex');
+
+        const firstResult = (dashboardState.currentPage - 1) * dashboardState.perPage + 1;
+        const lastResult = Math.min(dashboardState.currentPage * dashboardState.perPage, totalResults);
+        summary.textContent = `Showing ${firstResult}–${lastResult} of ${totalResults} results`;
+
+        previousButton.disabled = dashboardState.currentPage === 1;
+        nextButton.disabled = dashboardState.currentPage === totalPages;
+
+        pages.innerHTML = Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => `
+            <button type="button" data-page="${page}" aria-label="Go to page ${page}" aria-current="${page === dashboardState.currentPage ? 'page' : 'false'}" class="pagination-page grid h-10 min-w-10 place-items-center rounded-full px-3 text-sm font-black transition ${page === dashboardState.currentPage ? 'bg-ink text-white shadow-lg shadow-black/10' : 'bg-white text-ink hover:bg-gold/25'}">
+                ${page}
+            </button>
+        `).join('');
     }
 
     function updatePassFailChart(results) {
@@ -400,6 +453,11 @@
     }
 
     dashboardState.currentResults = dashboardState.initialResults || [];
+    dashboardState.filteredResults = [];
+    dashboardState.currentPage = 1;
+    dashboardState.perPage = 7;
+
+    renderDashboard(dashboardState.currentResults);
 
     function showModal(modal) {
         if (! modal) {
@@ -485,6 +543,25 @@
         const liveModalButton = event.target.closest('.open-live-answer-modal');
         const closeButton = event.target.closest('.close-answer-modal');
         const modalBackdrop = event.target.classList.contains('answer-modal') ? event.target : null;
+        const pageButton = event.target.closest('.pagination-page');
+
+        if (pageButton) {
+            dashboardState.currentPage = Number(pageButton.dataset.page);
+            renderTable(dashboardState.currentResults);
+        }
+
+        if (event.target.closest('#previousPage') && dashboardState.currentPage > 1) {
+            dashboardState.currentPage -= 1;
+            renderTable(dashboardState.currentResults);
+        }
+
+        if (event.target.closest('#nextPage')) {
+            const totalPages = Math.ceil(dashboardState.filteredResults.length / dashboardState.perPage);
+            if (dashboardState.currentPage < totalPages) {
+                dashboardState.currentPage += 1;
+                renderTable(dashboardState.currentResults);
+            }
+        }
 
         if (modalButton) {
             showModal(document.getElementById(modalButton.dataset.modalTarget));
@@ -535,10 +612,11 @@
 
         onSnapshot(collection(db, 'quizResults'), (snapshot) => {
             const results = snapshot.docs.map((doc) => normalizeResult(doc.data(), doc.id));
+            dashboardState.currentPage = 1;
             renderDashboard(results);
-            syncStatus.textContent = `Live: ${results.length} records`;
+            if (syncStatus) syncStatus.textContent = `Live: ${results.length} records`;
         }, () => {
-            syncStatus.textContent = 'Live updates unavailable';
+            if (syncStatus) syncStatus.textContent = 'Live updates unavailable';
         });
     }
 </script>
