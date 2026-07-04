@@ -3,7 +3,7 @@
 @section('title', 'ChefVirtuo Dashboard')
 
 @section('content')
-<div class="min-h-screen bg-[linear-gradient(135deg,#fff8ea_0%,#fffdf6_48%,#edf6e8_100%)] px-3 py-3 sm:px-6 sm:py-5 lg:px-8">
+<div class="min-h-screen w-full overflow-x-hidden bg-[linear-gradient(135deg,#fff8ea_0%,#fffdf6_48%,#edf6e8_100%)] px-3 py-3 sm:px-6 sm:py-5 lg:px-8">
     <nav class="mx-auto mb-4 flex max-w-7xl flex-col gap-4 rounded-2xl border border-white/80 bg-white/75 px-4 py-4 shadow-glass backdrop-blur-xl sm:mb-6 sm:flex-row sm:items-center sm:justify-between sm:rounded-3xl sm:px-5">
         <div class="flex items-center gap-4">
             <div class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white shadow-lg shadow-black/5">
@@ -17,7 +17,7 @@
 
         <div class="flex min-w-0 items-center justify-between gap-2 sm:justify-end sm:gap-3">
             <div class="min-w-0 text-left sm:text-right">
-                <p class="text-sm font-bold">{{ $lecturer['name'] ?? 'Lecturer' }}</p>
+                <p class="truncate text-sm font-bold">{{ $lecturer['name'] ?? 'Lecturer' }}</p>
                 <p class="max-w-36 truncate text-xs text-black/55 sm:max-w-48">{{ $lecturer['email'] ?? '' }}</p>
             </div>
             @if (! empty($lecturer['photo']))
@@ -32,7 +32,7 @@
         </div>
     </nav>
 
-    <main class="mx-auto max-w-7xl space-y-6">
+    <main class="mx-auto min-w-0 max-w-7xl space-y-6">
         <section class="rounded-2xl border border-white/80 bg-white/70 p-4 shadow-glass backdrop-blur-xl sm:rounded-3xl sm:p-6">
             <div class="grid gap-5 lg:grid-cols-[1fr_0.55fr] lg:items-end">
                 <div>
@@ -81,7 +81,7 @@
             </article>
         </section>
 
-        <section class="grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">
+        <section class="grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
             <div class="min-w-0 rounded-2xl border border-white/80 bg-white/80 p-4 shadow-glass backdrop-blur-xl sm:rounded-3xl sm:p-5">
                 <div class="mb-5">
                     <div>
@@ -90,10 +90,9 @@
                     </div>
                 </div>
 
-                <p class="mb-2 text-xs font-semibold text-black/45 sm:hidden">Swipe sideways to view all columns.</p>
-                <div class="overflow-x-auto rounded-2xl border border-black/5 overscroll-x-contain">
-                    <table class="min-w-[760px] divide-y divide-black/5 text-left text-sm lg:min-w-full">
-                        <thead class="bg-ink text-xs uppercase tracking-[0.16em] text-white">
+                <div class="min-w-0 max-w-full overflow-hidden rounded-2xl border border-black/5 sm:overflow-x-auto sm:overscroll-x-contain">
+                    <table class="block max-w-full text-left text-sm sm:table sm:min-w-[700px] sm:table-fixed sm:divide-y sm:divide-black/5 lg:min-w-full">
+                        <thead class="hidden bg-ink text-xs uppercase tracking-[0.16em] text-white sm:table-header-group">
                             <tr>
                                 <th class="px-5 py-4">Student ID</th>
                                 <th class="px-5 py-4">Module</th>
@@ -104,26 +103,28 @@
                                 <th class="px-5 py-4">Details</th>
                             </tr>
                         </thead>
-                        <tbody id="resultsTableBody" class="divide-y divide-black/5 bg-white/70">
+                        <tbody id="resultsTableBody" class="block min-w-0 max-w-full space-y-3 bg-white/70 p-3 sm:table-row-group sm:divide-y sm:divide-black/5 sm:space-y-0 sm:p-0">
                             @forelse ($results as $result)
-                                <tr class="transition hover:bg-gold/10">
-                                    <td class="px-5 py-4 font-black">{{ $result['studentID'] }}</td>
-                                    <td class="px-5 py-4">{{ $result['module'] }}</td>
-                                    <td class="px-5 py-4">{{ (int) $result['score'] }}/{{ (int) $result['totalQuestions'] }}</td>
-                                    <td class="px-5 py-4 font-bold">{{ $result['percentage'] }}%</td>
-                                    <td class="px-5 py-4">
+                                <tr class="block min-w-0 max-w-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition hover:bg-gold/10 sm:table-row sm:rounded-none sm:border-0 sm:shadow-none">
+                                    <td class="flex items-center justify-between gap-4 border-b border-black/5 px-4 py-3 font-black sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Student ID</span><span class="text-right sm:text-left">{{ $result['studentID'] }}</span></td>
+                                    <td class="flex min-w-0 items-center justify-between gap-3 border-b border-black/5 px-4 py-3 sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="shrink-0 text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Module</span><span class="w-[55%] min-w-0 [overflow-wrap:anywhere] text-right sm:w-auto sm:max-w-none sm:text-left">{{ $result['module'] }}</span></td>
+                                    <td class="flex items-center justify-between gap-4 border-b border-black/5 px-4 py-3 sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Score</span><span>{{ (int) $result['score'] }}/{{ (int) $result['totalQuestions'] }}</span></td>
+                                    <td class="flex items-center justify-between gap-4 border-b border-black/5 px-4 py-3 font-bold sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Percentage</span><span>{{ $result['percentage'] }}%</span></td>
+                                    <td class="flex items-center justify-between gap-4 border-b border-black/5 px-4 py-3 sm:table-cell sm:border-0 sm:px-5 sm:py-4">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Status</span>
                                         <span class="rounded-full px-3 py-1 text-xs font-black {{ $result['status'] === 'PASS' ? 'bg-moss/20 text-green-800' : 'bg-red-100 text-red-700' }}">{{ $result['status'] }}</span>
                                     </td>
-                                    <td class="px-5 py-4 text-black/60">{{ $result['timestamp'] }}</td>
-                                    <td class="px-5 py-4">
+                                    <td class="flex min-w-0 items-center justify-between gap-3 border-b border-black/5 px-4 py-3 text-black/60 sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="shrink-0 text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Timestamp</span><span class="w-[55%] min-w-0 [overflow-wrap:anywhere] text-right sm:w-auto sm:max-w-none sm:text-left">{{ $result['timestamp'] }}</span></td>
+                                    <td class="flex items-center justify-between gap-4 px-4 py-3 sm:table-cell sm:px-5 sm:py-4">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Details</span>
                                         <button type="button" data-modal-target="answer-modal-{{ $result['id'] ?: $loop->index }}" class="open-answer-modal rounded-full bg-ink px-4 py-2 text-xs font-black text-white shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-black">
                                             View Details
                                         </button>
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="7" class="px-5 py-10 text-center font-semibold text-black/50">No quiz results found.</td>
+                                <tr class="block sm:table-row">
+                                    <td colspan="7" class="block px-5 py-10 text-center font-semibold text-black/50 sm:table-cell">No quiz results found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -374,7 +375,7 @@
         dashboardState.filteredResults = filteredResults;
 
         if (! filteredResults.length) {
-            tableBody.innerHTML = '<tr><td colspan="7" class="px-5 py-10 text-center font-semibold text-black/50">No quiz results found.</td></tr>';
+            tableBody.innerHTML = '<tr class="block sm:table-row"><td colspan="7" class="block px-5 py-10 text-center font-semibold text-black/50 sm:table-cell">No quiz results found.</td></tr>';
             renderPagination(0);
             return;
         }
@@ -388,14 +389,15 @@
             const badgeClass = result.status === 'PASS' ? 'bg-moss/20 text-green-800' : 'bg-red-100 text-red-700';
 
             return `
-                <tr class="transition hover:bg-gold/10">
-                    <td class="px-5 py-4 font-black">${escapeHtml(result.studentID)}</td>
-                    <td class="px-5 py-4">${escapeHtml(result.module)}</td>
-                    <td class="px-5 py-4">${escapeHtml(formatNumber(result.score))}/${escapeHtml(formatNumber(result.totalQuestions))}</td>
-                    <td class="px-5 py-4 font-bold">${escapeHtml(formatNumber(result.percentage))}%</td>
-                    <td class="px-5 py-4"><span class="rounded-full px-3 py-1 text-xs font-black ${badgeClass}">${result.status}</span></td>
-                    <td class="px-5 py-4 text-black/60">${escapeHtml(result.timestamp)}</td>
-                    <td class="px-5 py-4">
+                <tr class="block min-w-0 max-w-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm transition hover:bg-gold/10 sm:table-row sm:rounded-none sm:border-0 sm:shadow-none">
+                    <td class="flex items-center justify-between gap-4 border-b border-black/5 px-4 py-3 font-black sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Student ID</span><span class="text-right sm:text-left">${escapeHtml(result.studentID)}</span></td>
+                    <td class="flex min-w-0 items-center justify-between gap-3 border-b border-black/5 px-4 py-3 sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="shrink-0 text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Module</span><span class="w-[55%] min-w-0 [overflow-wrap:anywhere] text-right sm:w-auto sm:max-w-none sm:text-left">${escapeHtml(result.module)}</span></td>
+                    <td class="flex items-center justify-between gap-4 border-b border-black/5 px-4 py-3 sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Score</span><span>${escapeHtml(formatNumber(result.score))}/${escapeHtml(formatNumber(result.totalQuestions))}</span></td>
+                    <td class="flex items-center justify-between gap-4 border-b border-black/5 px-4 py-3 font-bold sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Percentage</span><span>${escapeHtml(formatNumber(result.percentage))}%</span></td>
+                    <td class="flex items-center justify-between gap-4 border-b border-black/5 px-4 py-3 sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Status</span><span class="rounded-full px-3 py-1 text-xs font-black ${badgeClass}">${result.status}</span></td>
+                    <td class="flex min-w-0 items-center justify-between gap-3 border-b border-black/5 px-4 py-3 text-black/60 sm:table-cell sm:border-0 sm:px-5 sm:py-4"><span class="shrink-0 text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Timestamp</span><span class="w-[55%] min-w-0 [overflow-wrap:anywhere] text-right sm:w-auto sm:max-w-none sm:text-left">${escapeHtml(result.timestamp)}</span></td>
+                    <td class="flex items-center justify-between gap-4 px-4 py-3 sm:table-cell sm:px-5 sm:py-4">
+                        <span class="text-xs font-bold uppercase tracking-wider text-black/45 sm:hidden">Details</span>
                         <button type="button" data-result-id="${escapeHtml(result.id)}" class="open-live-answer-modal rounded-full bg-ink px-4 py-2 text-xs font-black text-white shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-black">
                             View Details
                         </button>
