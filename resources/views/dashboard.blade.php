@@ -3,8 +3,8 @@
 @section('title', 'ChefVirtuo Dashboard')
 
 @section('content')
-<div class="min-h-screen bg-[linear-gradient(135deg,#fff8ea_0%,#fffdf6_48%,#edf6e8_100%)] px-4 py-5 sm:px-6 lg:px-8">
-    <nav class="mx-auto mb-6 flex max-w-7xl flex-col gap-4 rounded-3xl border border-white/80 bg-white/75 px-5 py-4 shadow-glass backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between">
+<div class="min-h-screen bg-[linear-gradient(135deg,#fff8ea_0%,#fffdf6_48%,#edf6e8_100%)] px-3 py-3 sm:px-6 sm:py-5 lg:px-8">
+    <nav class="mx-auto mb-4 flex max-w-7xl flex-col gap-4 rounded-2xl border border-white/80 bg-white/75 px-4 py-4 shadow-glass backdrop-blur-xl sm:mb-6 sm:flex-row sm:items-center sm:justify-between sm:rounded-3xl sm:px-5">
         <div class="flex items-center gap-4">
             <div class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white shadow-lg shadow-black/5">
                 <img src="{{ asset('images/chefvirtuo-logo.png') }}" alt="ChefVirtuo logo" class="h-14 w-14 rounded-xl object-contain">
@@ -15,10 +15,10 @@
             </div>
         </div>
 
-        <div class="flex items-center justify-between gap-3 sm:justify-end">
-            <div class="text-right">
+        <div class="flex min-w-0 items-center justify-between gap-2 sm:justify-end sm:gap-3">
+            <div class="min-w-0 text-left sm:text-right">
                 <p class="text-sm font-bold">{{ $lecturer['name'] ?? 'Lecturer' }}</p>
-                <p class="max-w-48 truncate text-xs text-black/55">{{ $lecturer['email'] ?? '' }}</p>
+                <p class="max-w-36 truncate text-xs text-black/55 sm:max-w-48">{{ $lecturer['email'] ?? '' }}</p>
             </div>
             @if (! empty($lecturer['photo']))
                 <img src="{{ $lecturer['photo'] }}" alt="Lecturer profile" class="h-11 w-11 rounded-full ring-2 ring-gold/60">
@@ -27,17 +27,17 @@
             @endif
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button class="rounded-full bg-ink px-4 py-2 text-sm font-bold text-white shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-black">Logout</button>
+                <button class="rounded-full bg-ink px-3 py-2 text-xs font-bold text-white shadow-lg shadow-black/10 transition hover:-translate-y-0.5 hover:bg-black sm:px-4 sm:text-sm">Logout</button>
             </form>
         </div>
     </nav>
 
     <main class="mx-auto max-w-7xl space-y-6">
-        <section class="rounded-3xl border border-white/80 bg-white/70 p-6 shadow-glass backdrop-blur-xl">
+        <section class="rounded-2xl border border-white/80 bg-white/70 p-4 shadow-glass backdrop-blur-xl sm:rounded-3xl sm:p-6">
             <div class="grid gap-5 lg:grid-cols-[1fr_0.55fr] lg:items-end">
                 <div>
                     {{-- <p class="text-sm font-black uppercase tracking-[0.22em] text-gold">Lecturer Monitoring System</p> --}}
-                    <h2 class="mt-2 max-w-3xl text-3xl font-black tracking-tight sm:text-4xl">Equipments and Ingredients Quiz Dashbaord</h2>
+                    <h2 class="mt-2 max-w-3xl text-2xl font-black leading-tight tracking-tight sm:text-4xl">Equipment and Ingredients Quiz Dashboard</h2>
                     {{-- <p class="mt-3 max-w-2xl text-sm leading-6 text-black/60">Firestore collection: <span class="font-bold text-ink">quizResults</span></p> --}}
                 </div>
                 {{-- <div class="rounded-2xl bg-ink p-5 text-white shadow-xl shadow-black/10">
@@ -58,40 +58,41 @@
             </div>
         @endif
 
-        <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <article class="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-xl shadow-black/5">
-                <div class="mb-5 h-2 w-16 rounded-full bg-gold"></div>
-                <p class="text-sm font-bold uppercase tracking-[0.18em] text-black/45">Total Students</p>
-                <p id="totalStudents" class="mt-3 text-4xl font-black tracking-tight">{{ $stats['total_students'] }}</p>
+        <section class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+            <article class="rounded-2xl border border-white/80 bg-white/80 p-4 shadow-xl shadow-black/5 sm:rounded-3xl sm:p-6">
+                <div class="mb-4 h-1.5 w-12 rounded-full bg-gold sm:mb-5 sm:h-2 sm:w-16"></div>
+                <p class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-black/45 sm:text-sm sm:tracking-[0.18em]">Total Students</p>
+                <p id="totalStudents" class="mt-2 text-3xl font-black tracking-tight sm:mt-3 sm:text-4xl">{{ $stats['total_students'] }}</p>
             </article>
-            <article class="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-xl shadow-black/5">
-                <div class="mb-5 h-2 w-16 rounded-full bg-moss"></div>
-                <p class="text-sm font-bold uppercase tracking-[0.18em] text-black/45">Average Score</p>
-                <p class="mt-3 text-4xl font-black tracking-tight"><span id="averageScore">{{ $stats['average_score'] }}</span>%</p>
+            <article class="rounded-2xl border border-white/80 bg-white/80 p-4 shadow-xl shadow-black/5 sm:rounded-3xl sm:p-6">
+                <div class="mb-4 h-1.5 w-12 rounded-full bg-moss sm:mb-5 sm:h-2 sm:w-16"></div>
+                <p class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-black/45 sm:text-sm sm:tracking-[0.18em]">Average Score</p>
+                <p class="mt-2 text-3xl font-black tracking-tight sm:mt-3 sm:text-4xl"><span id="averageScore">{{ $stats['average_score'] }}</span>%</p>
             </article>
-            <article class="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-xl shadow-black/5">
-                <div class="mb-5 h-2 w-16 rounded-full bg-ink"></div>
-                <p class="text-sm font-bold uppercase tracking-[0.18em] text-black/45">Highest Score</p>
-                <p class="mt-3 text-4xl font-black tracking-tight"><span id="highestScore">{{ $stats['highest_score'] }}</span>%</p>
+            <article class="rounded-2xl border border-white/80 bg-white/80 p-4 shadow-xl shadow-black/5 sm:rounded-3xl sm:p-6">
+                <div class="mb-4 h-1.5 w-12 rounded-full bg-ink sm:mb-5 sm:h-2 sm:w-16"></div>
+                <p class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-black/45 sm:text-sm sm:tracking-[0.18em]">Highest Score</p>
+                <p class="mt-2 text-3xl font-black tracking-tight sm:mt-3 sm:text-4xl"><span id="highestScore">{{ $stats['highest_score'] }}</span>%</p>
             </article>
-            <article class="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-xl shadow-black/5">
-                <div class="mb-5 h-2 w-16 rounded-full bg-sage"></div>
-                <p class="text-sm font-bold uppercase tracking-[0.18em] text-black/45">Lowest Score</p>
-                <p class="mt-3 text-4xl font-black tracking-tight"><span id="lowestScore">{{ $stats['lowest_score'] }}</span>%</p>
+            <article class="rounded-2xl border border-white/80 bg-white/80 p-4 shadow-xl shadow-black/5 sm:rounded-3xl sm:p-6">
+                <div class="mb-4 h-1.5 w-12 rounded-full bg-sage sm:mb-5 sm:h-2 sm:w-16"></div>
+                <p class="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-black/45 sm:text-sm sm:tracking-[0.18em]">Lowest Score</p>
+                <p class="mt-2 text-3xl font-black tracking-tight sm:mt-3 sm:text-4xl"><span id="lowestScore">{{ $stats['lowest_score'] }}</span>%</p>
             </article>
         </section>
 
         <section class="grid gap-5 xl:grid-cols-[1.35fr_0.85fr]">
-            <div class="rounded-3xl border border-white/80 bg-white/80 p-5 shadow-glass backdrop-blur-xl">
+            <div class="min-w-0 rounded-2xl border border-white/80 bg-white/80 p-4 shadow-glass backdrop-blur-xl sm:rounded-3xl sm:p-5">
                 <div class="mb-5">
                     <div>
                         <p class="text-sm font-bold uppercase tracking-[0.22em] text-moss">Quiz Results</p>
-                        <h2 class="mt-1 text-2xl font-black tracking-tight">Student Performance Records</h2>
+                        <h2 class="mt-1 text-xl font-black tracking-tight sm:text-2xl">Student Performance Records</h2>
                     </div>
                 </div>
 
-                <div class="overflow-x-auto rounded-2xl border border-black/5">
-                    <table class="min-w-full divide-y divide-black/5 text-left text-sm">
+                <p class="mb-2 text-xs font-semibold text-black/45 sm:hidden">Swipe sideways to view all columns.</p>
+                <div class="overflow-x-auto rounded-2xl border border-black/5 overscroll-x-contain">
+                    <table class="min-w-[760px] divide-y divide-black/5 text-left text-sm lg:min-w-full">
                         <thead class="bg-ink text-xs uppercase tracking-[0.16em] text-white">
                             <tr>
                                 <th class="px-5 py-4">Student ID</th>
@@ -131,7 +132,7 @@
 
                 <div id="resultsPagination" class="mt-5 hidden flex-col gap-3 sm:flex-row sm:items-center sm:justify-between" aria-label="Quiz results pagination">
                     <p id="paginationSummary" class="text-sm font-semibold text-black/55"></p>
-                    <div class="flex items-center gap-2">
+                    <div class="flex max-w-full items-center gap-2 overflow-x-auto pb-1">
                         <button id="previousPage" type="button" class="rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-black text-ink transition hover:border-ink hover:bg-ink hover:text-white disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-black/10 disabled:hover:bg-white disabled:hover:text-ink">
                             Previous
                         </button>
@@ -144,7 +145,7 @@
             </div>
 
             <aside class="space-y-5">
-                <div class="rounded-3xl border border-white/80 bg-white/80 p-5 shadow-glass backdrop-blur-xl">
+                <div class="rounded-2xl border border-white/80 bg-white/80 p-4 shadow-glass backdrop-blur-xl sm:rounded-3xl sm:p-5">
                     <div class="flex items-start justify-between gap-4">
                         <div>
                             <p class="text-sm font-bold uppercase tracking-[0.18em] text-moss">Pass Rate</p>
@@ -152,7 +153,7 @@
                         </div>
                         <span class="rounded-full bg-gold/20 px-3 py-1 text-xs font-black text-ink">>= 50%</span>
                     </div>
-                    <div class="mt-4 h-72">
+                    <div class="mt-4 h-56 sm:h-72">
                         <canvas id="passFailChart"></canvas>
                     </div>
                 </div>
@@ -168,7 +169,7 @@
         $wrongCount = collect($result['answers'])->where('isCorrect', false)->count();
     @endphp
 
-    <div id="answer-modal-{{ $result['id'] ?: $loop->index }}" class="answer-modal pointer-events-none fixed inset-0 z-50 hidden items-center justify-center bg-ink/45 px-4 py-6 opacity-0 backdrop-blur-sm transition duration-200" aria-hidden="true">
+    <div id="answer-modal-{{ $result['id'] ?: $loop->index }}" class="answer-modal pointer-events-none fixed inset-0 z-50 hidden items-center justify-center bg-ink/45 px-2 py-3 opacity-0 backdrop-blur-sm transition duration-200 sm:px-4 sm:py-6" aria-hidden="true">
         <div class="modal-panel max-h-[90vh] w-full max-w-4xl scale-95 overflow-hidden rounded-3xl border border-white/80 bg-white/85 shadow-glass backdrop-blur-2xl transition duration-200">
             <div class="flex items-start justify-between gap-5 border-b border-black/5 bg-white/55 px-6 py-5">
                 <div>
@@ -179,7 +180,7 @@
                 <button type="button" class="close-answer-modal grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-lg font-black text-white transition hover:-translate-y-0.5 hover:bg-black" aria-label="Close answer details">×</button>
             </div>
 
-            <div class="max-h-[72vh] overflow-y-auto p-6">
+            <div class="max-h-[72vh] overflow-y-auto p-4 sm:p-6">
                 <div class="mb-5 grid gap-3 sm:grid-cols-2">
                     <div class="rounded-2xl border border-green-200 bg-green-50/85 p-4">
                         <p class="text-xs font-black uppercase tracking-[0.18em] text-green-700">Total Correct</p>
@@ -225,7 +226,7 @@
     </div>
 @endforeach
 
-<div id="liveAnswerModal" class="answer-modal pointer-events-none fixed inset-0 z-50 hidden items-center justify-center bg-ink/45 px-4 py-6 opacity-0 backdrop-blur-sm transition duration-200" aria-hidden="true">
+<div id="liveAnswerModal" class="answer-modal pointer-events-none fixed inset-0 z-50 hidden items-center justify-center bg-ink/45 px-2 py-3 opacity-0 backdrop-blur-sm transition duration-200 sm:px-4 sm:py-6" aria-hidden="true">
     <div class="modal-panel max-h-[90vh] w-full max-w-4xl scale-95 overflow-hidden rounded-3xl border border-white/80 bg-white/85 shadow-glass backdrop-blur-2xl transition duration-200">
         <div class="flex items-start justify-between gap-5 border-b border-black/5 bg-white/55 px-6 py-5">
             <div>
@@ -235,7 +236,7 @@
             </div>
             <button type="button" class="close-answer-modal grid h-10 w-10 shrink-0 place-items-center rounded-full bg-ink text-lg font-black text-white transition hover:-translate-y-0.5 hover:bg-black" aria-label="Close answer details">×</button>
         </div>
-        <div id="liveAnswerModalBody" class="max-h-[72vh] overflow-y-auto p-6"></div>
+        <div id="liveAnswerModalBody" class="max-h-[72vh] overflow-y-auto p-4 sm:p-6"></div>
     </div>
 </div>
 
