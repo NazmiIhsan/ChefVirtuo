@@ -34,7 +34,9 @@ class AuthController extends Controller
 
             return redirect()
                 ->route('login')
-                ->withErrors(['auth' => 'Google authentication failed. Please try again.']);
+                ->withErrors([
+                    'auth' => $exception->getMessage()
+                ]);
         }
 
         $allowedEmails = config('firebase.lecturer_emails', []);
