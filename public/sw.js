@@ -1,8 +1,7 @@
-const CACHE_NAME = 'chefvirtuo-v1';
+const CACHE_NAME = 'chefvirtuo-v2';
 
 const urlsToCache = [
     '/',
-    '/login',
 ];
 
 self.addEventListener('install', event => {
@@ -13,6 +12,16 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+    const url = new URL(event.request.url);
+
+    // Never cache auth pages
+    if (
+        url.pathname.startsWith('/auth') ||
+        url.pathname === '/login'
+    ) {
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then(response => response || fetch(event.request))
