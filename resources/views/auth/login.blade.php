@@ -70,8 +70,13 @@
 
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
-    import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
-
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult
+} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
     if (window.location.hostname === '127.0.0.1') {
         window.location.replace(window.location.href.replace('127.0.0.1', 'localhost'));
     }
@@ -95,6 +100,19 @@
         appId: firebaseConfig.app_id,
     });
 
+    getRedirectResult(auth)
+    .then(async (result) => {
+        if (!result) return;
+
+        document.getElementById('idToken').value =
+            await result.user.getIdToken();
+
+        document.getElementById('firebaseSessionForm').submit();
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
     loginButton.addEventListener('click', async () => {
         errorBox.classList.add('hidden');
         loginButton.disabled = true;
@@ -103,8 +121,15 @@
         try {
             const auth = getAuth(app);
             const provider = new GoogleAuthProvider();
-            const result = await signInWithPopup(auth, provider);
-            document.getElementById('idToken').value = await result.user.getIdToken();
+            const isIOSPWA =
+    window.matchMedia('(display-mode: standalone)').matches &&
+    /iPad|iPhone|iPod/.test(navigator.userAgent);
+if (isIOSPWA) {
+    await signInWithRedirect(auth, provider);
+    return;
+}
+
+const result = await signInWithPopup(auth, provider);            document.getElementById('idToken').value = await result.user.getIdToken();
             document.getElementById('firebaseSessionForm').submit();
         } catch (error) {
             const fallbackMessage = 'Google sign-in could not start. Please try again.';
