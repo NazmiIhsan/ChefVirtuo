@@ -39,24 +39,12 @@ class AuthController extends Controller
                 ]);
         }
 
-        $allowedEmails = config('firebase.lecturer_emails', []);
         $email = strtolower($lecturer['email'] ?? '');
 
-        if (! in_array($email, $allowedEmails, true)) {
-            Log::notice('ChefVirtuo lecturer login rejected', [
-                'email' => $email,
-                'allowed_emails' => $allowedEmails,
-            ]);
-
-            $message = 'This Google account is not registered as a ChefVirtuo lecturer.';
-
-            if (config('app.debug') && $email !== '') {
-                $message .= " Add {$email} to LECTURER_EMAILS in .env.";
-            }
-
+        if ($email === '') {
             return redirect()
                 ->route('login')
-                ->withErrors(['auth' => $message]);
+                ->withErrors(['auth' => 'Your Google account did not provide an email address.']);
         }
 
         session()->regenerate();

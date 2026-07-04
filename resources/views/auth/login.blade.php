@@ -43,7 +43,7 @@
                 <div class="mb-8">
                     <p class="text-sm font-bold uppercase tracking-[0.25em] text-moss">Secure Access</p>
                     <h2 class="mt-3 text-3xl font-black tracking-tight">Sign in with Google</h2>
-                    <p class="mt-3 text-sm leading-6 text-black/60">Only approved lecturer emails configured in Laravel can access the dashboard.</p>
+                    <p class="mt-3 text-sm leading-6 text-black/60">Continue with any Google account to access the dashboard.</p>
                 </div>
 
                 @if ($errors->any())
@@ -70,13 +70,8 @@
 
 <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js';
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signInWithRedirect,
-    getRedirectResult
-} from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js';
+
     if (window.location.hostname === '127.0.0.1') {
         window.location.replace(window.location.href.replace('127.0.0.1', 'localhost'));
     }
@@ -100,19 +95,6 @@ import {
         appId: firebaseConfig.app_id,
     });
 
-    getRedirectResult(auth)
-    .then(async (result) => {
-        if (!result) return;
-
-        document.getElementById('idToken').value =
-            await result.user.getIdToken();
-
-        document.getElementById('firebaseSessionForm').submit();
-    })
-    .catch(error => {
-        console.error(error);
-    });
-
     loginButton.addEventListener('click', async () => {
         errorBox.classList.add('hidden');
         loginButton.disabled = true;
@@ -121,15 +103,8 @@ import {
         try {
             const auth = getAuth(app);
             const provider = new GoogleAuthProvider();
-            const isIOSPWA =
-    window.matchMedia('(display-mode: standalone)').matches &&
-    /iPad|iPhone|iPod/.test(navigator.userAgent);
-if (isIOSPWA) {
-    await signInWithRedirect(auth, provider);
-    return;
-}
-
-const result = await signInWithPopup(auth, provider);            document.getElementById('idToken').value = await result.user.getIdToken();
+            const result = await signInWithPopup(auth, provider);
+            document.getElementById('idToken').value = await result.user.getIdToken();
             document.getElementById('firebaseSessionForm').submit();
         } catch (error) {
             const fallbackMessage = 'Google sign-in could not start. Please try again.';

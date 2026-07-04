@@ -12,7 +12,7 @@ class LecturerOnly
     {
         $lecturer = session('lecturer');
 
-        if (! $lecturer || ! in_array(strtolower($lecturer['email'] ?? ''), config('firebase.lecturer_emails', []), true)) {
+        if (! $lecturer || empty($lecturer['email'])) {
             return redirect()->route('login');
         }
 
