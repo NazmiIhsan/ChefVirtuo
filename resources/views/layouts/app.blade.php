@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <meta name="theme-color" content="#111111">
+<link rel="manifest" href="{{ asset('manifest.json') }}">
+<link rel="apple-touch-icon" href="{{ asset('images/icons/icon-192.png') }}">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="ChefVirtuo">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -32,5 +38,10 @@
 </head>
 <body class="min-h-screen bg-cream text-ink antialiased">
     @yield('content')
+    <script>
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+}
+</script>
 </body>
 </html>
