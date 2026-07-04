@@ -37,7 +37,7 @@
             <div class="grid gap-5 lg:grid-cols-[1fr_0.55fr] lg:items-end">
                 <div>
                     {{-- <p class="text-sm font-black uppercase tracking-[0.22em] text-gold">Lecturer Monitoring System</p> --}}
-                    <h2 class="mt-2 max-w-3xl text-2xl font-black leading-tight tracking-tight sm:text-4xl">Equipment and Ingredients Quiz Dashboard</h2>
+                    <h2 class="mt-2 max-w-3xl text-2xl font-black leading-tight tracking-tight sm:text-4xl">Equipments and Ingredients Quiz Dashboard</h2>
                     {{-- <p class="mt-3 max-w-2xl text-sm leading-6 text-black/60">Firestore collection: <span class="font-bold text-ink">quizResults</span></p> --}}
                 </div>
                 {{-- <div class="rounded-2xl bg-ink p-5 text-white shadow-xl shadow-black/10">
