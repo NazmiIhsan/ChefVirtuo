@@ -1,29 +1,24 @@
-const CACHE_NAME = 'chefvirtuo-v2';
-
-const urlsToCache = [
-    '/',
-];
+const CACHE_NAME = 'chefvirtuo-v3';
 
 self.addEventListener('install', event => {
+    self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(urlsToCache))
+        caches.keys().then(keys =>
+            Promise.all(
+                keys.map(key => {
+                    if (key !== CACHE_NAME) {
+                        return caches.delete(key);
+                    }
+                })
+            )
+        )
     );
+    self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
-    const url = new URL(event.request.url);
-
-    // Never cache auth pages
-    if (
-        url.pathname.startsWith('/auth') ||
-        url.pathname === '/login'
-    ) {
-        return;
-    }
-
-    event.respondWith(
-        caches.match(event.request)
-            .then(response => response || fetch(event.request))
-    );
+    // Let every request go directly to the network
 });
